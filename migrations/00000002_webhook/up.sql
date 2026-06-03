@@ -1,0 +1,2 @@
+ALTER TABLE projects ADD COLUMN webhookSecret TEXT;
+ALTER TABLE projects ADD COLUMN autoDeploy INTEGER NOT NULL DEFAULT 1;

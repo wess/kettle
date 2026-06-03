@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS databases (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  projectId INTEGER NOT NULL REFERENCES projects(id),
+  engine TEXT NOT NULL DEFAULT 'postgres',
+  dbName TEXT NOT NULL,
+  dbUser TEXT NOT NULL,
+  dbPassword TEXT NOT NULL,
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_databases_project ON databases(projectId);

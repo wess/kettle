@@ -1,0 +1,61 @@
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  email TEXT UNIQUE NOT NULL,
+  password TEXT NOT NULL,
+  role TEXT NOT NULL DEFAULT 'admin',
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS projects (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT UNIQUE NOT NULL,
+  repoUrl TEXT,
+  branch TEXT NOT NULL DEFAULT 'main',
+  buildType TEXT NOT NULL DEFAULT 'auto',
+  rootDir TEXT NOT NULL DEFAULT '.',
+  buildCommand TEXT,
+  startCommand TEXT,
+  internalPort INTEGER NOT NULL DEFAULT 3000,
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS deployments (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  projectId INTEGER NOT NULL REFERENCES projects(id),
+  status TEXT NOT NULL DEFAULT 'queued',
+  trigger TEXT NOT NULL DEFAULT 'manual',
+  commitSha TEXT,
+  image TEXT,
+  containerId TEXT,
+  hostPort INTEGER,
+  error TEXT,
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+  finishedAt DATETIME
+);
+
+CREATE TABLE IF NOT EXISTS envvars (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  projectId INTEGER NOT NULL REFERENCES projects(id),
+  key TEXT NOT NULL,
+  value TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS domains (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  projectId INTEGER NOT NULL REFERENCES projects(id),
+  host TEXT UNIQUE NOT NULL,
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS logs (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  deploymentId INTEGER NOT NULL REFERENCES deployments(id),
+  stream TEXT NOT NULL DEFAULT 'build',
+  line TEXT NOT NULL,
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_deployments_project ON deployments(projectId);
+CREATE INDEX IF NOT EXISTS idx_envvars_project ON envvars(projectId);
+CREATE INDEX IF NOT EXISTS idx_domains_project ON domains(projectId);
+CREATE INDEX IF NOT EXISTS idx_logs_deployment ON logs(deploymentId);

@@ -1,0 +1,26 @@
+{
+  "name": "kettle",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "bun --hot server.ts",
+    "start": "bun server.ts",
+    "cli": "bun cli.ts",
+    "test": "bun test",
+    "check": "bunx biome check src/",
+    "tidy": "bunx biome check --write src/"
+  },
+  "dependencies": {
+    "react": "^19",
+    "react-dom": "^19",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@biomejs/biome": "latest",
+    "typescript": "^5"
+  }
+}
