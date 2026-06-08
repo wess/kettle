@@ -1,3 +1,4 @@
+import { mcpRoutes } from "../mcp/http.ts"
 import { authRoutes } from "./auth.ts"
 import { databaseRoutes } from "./database.ts"
 import { deploymentRoutes } from "./deployments.ts"
@@ -18,4 +19,5 @@ export const allRoutes = [
   ...domainRoutes,
   ...databaseRoutes,
   ...logRoutes,
+  ...mcpRoutes,
 ]
