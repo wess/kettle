@@ -29,6 +29,8 @@
       "@atlas/security": ["../atlas/packages/security/index.ts"],
       "@atlas/edge": ["../atlas/packages/edge/index.ts"],
       "@atlas/migrate": ["../atlas/packages/migrate/index.ts"],
+      "@atlas/mcp": ["../atlas/packages/mcp/index.ts"],
+      "@atlas/storage": ["../atlas/packages/storage/index.ts"],
       "@atlas/cli": ["../atlas/packages/cli/index.ts"]
     }
   },

@@ -30,6 +30,14 @@ export const config = defineConfig({
   // Kettle provisions via `docker exec`). Set to expose it for external tools.
   pgHostPort: env("PG_HOST_PORT", { parse: Number, default: "0" }),
 
+  // Expose Kettle's control-plane tools over an HTTP MCP endpoint (POST /mcp).
+  // Off by default — flip to 1/true to let bearer-authenticated AI clients
+  // call projects.* / deploy. Write tools (create, deploy) stay gated behind
+  // MCP_WRITE so an operator can advertise read-only tools without exposing
+  // mutations.
+  mcpEnabled: env("MCP_ENABLED", { parse: (s) => s === "1" || s === "true", default: "0" }),
+  mcpWrite: env("MCP_WRITE", { parse: (s) => s === "1" || s === "true", default: "0" }),
+
   // Report deploy status back to Tangle (git.local). Both required to enable.
   tangleUrl: env("TANGLE_URL", { default: "" }),
   tangleToken: env("TANGLE_TOKEN", { default: "" }),
