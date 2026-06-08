@@ -15,8 +15,13 @@ const detectIp = async (): Promise<string> => {
   const route = await exec(["ip", "-4", "route", "get", "1.1.1.1"])
   hostIp = route.output.match(/\bsrc\s+(\d+\.\d+\.\d+\.\d+)/)?.[1] ?? null
   if (!hostIp) {
+    // Fallback: prefer a real LAN address. Skip loopback, link-local, and the
+    // docker bridge range (172.16-31.x) — `hostname -I` often lists docker0
+    // first, which would advertise an IP unreachable from the LAN.
+    const usable = (ip: string): boolean =>
+      !!ip && !ip.startsWith("127.") && !ip.startsWith("169.254.") && !/^172\.(1[6-9]|2\d|3[01])\./.test(ip)
     const r = await exec(["hostname", "-I"])
-    hostIp = r.output.trim().split(/\s+/).find((ip) => ip && !ip.startsWith("127.")) ?? "127.0.0.1"
+    hostIp = r.output.trim().split(/\s+/).find(usable) ?? "127.0.0.1"
   }
   return hostIp
 }
